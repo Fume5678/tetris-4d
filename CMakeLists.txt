@@ -43,7 +43,10 @@ file(GLOB_RECURSE SRC_ENGINEMODULE "src/engineModule/*.cpp" "src/engineModule/*.
 
 
 add_executable(${This} ${SRC_GAMEMODULE} ${SRC_ENGINEMODULE})
-target_link_libraries(${This} raylib)
+source_group("gameModule" FILES ${SRC_GAMEMODULE})
+source_group("engineModule" FILES ${SRC_ENGINEMODULE})
 
-source_group("gameModule" ${SRC_GAMEMODULE})
-source_group("engineModule" ${SRC_ENGINEMODULE})
+
+target_link_libraries(${This} raylib)
+target_include_directories(${This} PUBLIC src)
+target_compile_definitions(${This} PUBLIC ASSETS_PATH="${CMAKE_CURRENT_SOURCE_DIR}/assets/")
