@@ -17,10 +17,13 @@ namespace gameModule {
 
 
     private:
+        std::pair<float, float> screenSize;
         Texture2D bg;
         int stepTimer;
         int deleyRedRing;
         Rectangle redRing;
         Rectangle blueRing;
+        Rectangle gridRect;
+        Rectangle blackSquare;
     };
 } // namespace gameModule

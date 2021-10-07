@@ -6,7 +6,7 @@ int GameParams::cellSize{ 24 };
 int GameParams::stepDelay{ 23 };
 std::pair<int, int>  GameParams::gridSize{ 30, 30 };
 
- int GameParams::getCellSize() {
+ int GameParams::getCellSizePx() {
     return cellSize;
 }
 

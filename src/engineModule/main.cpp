@@ -51,16 +51,19 @@ int main(void) {
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
+        // Actions loop first
         float delta = GetFrameTime();
         mainActions(root, delta);
-
+                
+        // Render loop second
         BeginDrawing();
         ClearBackground(WHITE);
+
+        mainRender(root, delta);
         if(EngineParams::isShowFps()){
             DrawFPS(5, 4);
         }
 
-        mainRender(root, delta);
         //----------------------------------------------------------------------------------
         EndDrawing();
     }

@@ -7,7 +7,7 @@ namespace gameModule {
     class GameParams {
     public:
         // Size of cell in px 
-        static int getCellSize();
+        static int getCellSizePx();
 
         // Size of cell in fps 
         static int getStepDelayMs();
