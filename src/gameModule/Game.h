@@ -4,7 +4,11 @@
 #include <raylib.h>
 #include "engineModule/Actor.h"
 
+
 namespace gameModule {
+
+    using GridTable = bool[30][30];
+
     class Game : public engineModule::Actor{
     public:
         Game(std::string name);
@@ -17,6 +21,7 @@ namespace gameModule {
 
 
     private:
+        GridTable gridTable;
         std::pair<float, float> screenSize;
         Texture2D bg;
         int stepTimer;

@@ -1,15 +1,24 @@
+#include <thread>
+
 #include "gameModule/GameParams.h"
-
 #include "Game.h"
-
 
 using namespace gameModule;
 using namespace engineModule;
 
-Game::Game(std::string name):Actor{name} {
+Game::Game(std::string name):Actor{name}, gridTable{} {
 	screenSize = ::EngineParams::getScreenResolution();
 	EngineParams::setShowFps(true);
-	
+
+	// Starting blacksqare 
+	for(size_t i = 11; i < 19; ++i){
+		for(size_t j = 11; j < 19; ++j){
+			gridTable[i][j] = true;
+		}
+	}
+
+	gridTable[1][1] = true; 
+
 	init();
 }
 
@@ -22,6 +31,12 @@ void Game::init() {
 
 	gridRect.width = GameParams::getCellSizePx();
 	gridRect.height = GameParams::getCellSizePx();
+
+	// Blue ring
+	blueRing.width = GameParams::getCellSizePx() * 24; // 24 - blue ring size;
+	blueRing.height = GameParams::getCellSizePx() * 24;
+	blueRing.x = screenSize.first / 2 - blueRing.width / 2;
+	blueRing.y = screenSize.second / 2 - blueRing.height / 2;
 }
 
 void gameModule::Game::action(float delta) {
@@ -30,32 +45,34 @@ void gameModule::Game::action(float delta) {
 	redRing.x = screenSize.first / 2 - redRing.width / 2;
 	redRing.y = screenSize.second / 2 - redRing.height / 2;
 
-	blueRing.width = GameParams::getCellSizePx() * 24; // 24 - blue ring size;
-	blueRing.height = GameParams::getCellSizePx() * 24;
-	blueRing.x = screenSize.first / 2 - blueRing.width / 2;
-	blueRing.y = screenSize.second / 2 - blueRing.height / 2;
 
-	blackSquare.width = GameParams::getCellSizePx() * 8; // 8 - black square size
-	blackSquare.height = GameParams::getCellSizePx() * 8; 
-	blackSquare.x = screenSize.first / 2 - blackSquare.width / 2;
-	blackSquare.y = screenSize.second / 2 - blackSquare.height / 2;
+
+	// TODO: checking for circle around earth 
 
 }
 
 void gameModule::Game::render(float delta) {
 	DrawTexture(bg, 0, 0, WHITE);
-	
-	// —генерировать текстуру, а не выводить циклами
+
+
+	// TODO: optimize grid drawing
 	for (int i = 0; i < 30; ++i) {
 		for(int j = 0; j < 30; ++j){
 			gridRect.x = i * GameParams::getCellSizePx() + redRing.x;
 			gridRect.y = j * GameParams::getCellSizePx() + redRing.y;
-			DrawRectangleLinesEx(gridRect, 0.5, LIGHTGRAY);
+			if(!gridTable[i][j]){
+				DrawRectangleLinesEx(gridRect, 0.5, LIGHTGRAY);
+			}else{
+				if(10 < i && i < 19 && 10 <= j && j < 19){
+					DrawRectangle(gridRect.x, gridRect.y, gridRect.width, gridRect.height, BLACK);
+				}else {
+					DrawRectangle(gridRect.x, gridRect.y, gridRect.width, gridRect.height, GRAY);
+				}
+			}
 		}
 	}
 
 	DrawRectangleLinesEx(blueRing, 3, BLUE);
 	DrawRectangleLinesEx(redRing, 3, RED);
 	DrawRectangleLinesEx(redRing, 3, RED);
-	DrawRectangleRec(blackSquare, BLACK);
 }
