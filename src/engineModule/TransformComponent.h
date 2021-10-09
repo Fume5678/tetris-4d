@@ -22,6 +22,8 @@ namespace engineModule {
         float getSizeX();
         float getSizeY();
 
+        void move(float x, float y);
+
         std::pair<float, float> getPos() const;
 
         std::pair<float, float> getScale() const;

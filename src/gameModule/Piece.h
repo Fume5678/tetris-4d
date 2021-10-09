@@ -29,6 +29,9 @@ namespace gameModule {
     class Piece : public engineModule::Actor {
         friend PieceFactory;
         std::vector<Vector2i>& getRefUpBlocks();
+        std::vector<Vector2i>& getRefRightBlocks();
+        std::vector<Vector2i>& getRefDownBlocks();
+        std::vector<Vector2i>& getRefLeftBlocks();
 
     public:
         Piece(std::string name);
@@ -37,15 +40,20 @@ namespace gameModule {
         void init();
         void action(float delta) override;
         void render(float delta) override;
+        void rotateLeft();
+        void rotateRight();
 
         Vector2i getPosOnGrid();
+        std::vector<Vector2i>* getCurrentBlocks();
 
     private:
         Color                 blocsColor;
         Vector2i              posOnGrid;
         std::vector<Vector2i> upBlocks;
         std::vector<Vector2i> rightBlocks;
-        Direction             direct;
+        std::vector<Vector2i> leftBlocks;
+        std::vector<Vector2i> downBlocks;
+        std::vector<Vector2i>* p_currentBlocks;
     };
 
 } // namespace gameModule

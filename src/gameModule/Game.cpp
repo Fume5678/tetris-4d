@@ -19,8 +19,6 @@ Game::Game(std::string name):Actor{name}, gridTable{} {
 		}
 	}
 
-	gridTable[1][1] = true; 
-
 	init();
 }
 
@@ -40,10 +38,10 @@ void Game::init() {
 	blueRing.x = screenSize.first / 2 - blueRing.width / 2;
 	blueRing.y = screenSize.second / 2 - blueRing.height / 2;
 
-	Piece* piece = new Piece{"palka"};
-	PieceFactory::buildFigure(piece, 'I');
-	piece->setPosXY({4, 4});
-	addChild(piece);
+	activePiece = new Piece{"palka"};
+	PieceFactory::buildFigure(activePiece, 'S');
+	activePiece->setXY(blueRing.x, blueRing.y);
+	addChild(activePiece);
 
 }
 
@@ -54,6 +52,28 @@ void gameModule::Game::action(float delta) {
 	redRing.y = screenSize.second / 2 - redRing.height / 2;
 
 
+	if(IsKeyDown(KEY_D)){
+		// TODO: checking for collision
+		activePiece->move(GameParams::getCellSizePx(), 0);
+	}
+	if(IsKeyDown(KEY_A)){
+		activePiece->move(-GameParams::getCellSizePx(), 0);
+	}
+	if(IsKeyDown(KEY_W)){
+		activePiece->move(0, -GameParams::getCellSizePx());
+	}
+	if(IsKeyDown(KEY_S)){
+		activePiece->move(0, GameParams::getCellSizePx());
+	}
+	
+
+	if(IsKeyPressed(KEY_Q)){
+		activePiece->rotateLeft();
+	}
+
+	if(IsKeyPressed(KEY_E)){
+		activePiece->rotateRight();
+	}
 
 	// TODO: checking for circle around earth 
 

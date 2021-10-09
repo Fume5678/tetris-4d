@@ -7,6 +7,7 @@
 
 namespace gameModule {
 
+    class Piece;
     using GridTable = bool[30][30];
 
     class Game : public engineModule::Actor{
@@ -30,5 +31,6 @@ namespace gameModule {
         Rectangle blueRing;
         Rectangle gridRect;
         Rectangle blackSquare;
+        Piece* activePiece;
     };
 } // namespace gameModule

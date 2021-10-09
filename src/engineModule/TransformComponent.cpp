@@ -67,3 +67,8 @@ std::pair<float, float> TransformComponent::getScale() const {
 std::pair<float, float> TransformComponent::getSize() const {
     return size;
 }
+
+void engineModule::TransformComponent::move(float x, float y) {
+    pos.first += x;
+    pos.second += y;
+}
