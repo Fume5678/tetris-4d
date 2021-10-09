@@ -5,6 +5,8 @@
 
 namespace engineModule {
 	class EngineParams {
+		EngineParams();
+		EngineParams(const EngineParams&) = delete;
 	public:
 
 		static void setShowFps(bool val);

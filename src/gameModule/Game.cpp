@@ -2,6 +2,8 @@
 
 #include "gameModule/GameParams.h"
 #include "Game.h"
+#include "gameModule/Piece.h"
+#include "gameModule/PieceFactory.h"
 
 using namespace gameModule;
 using namespace engineModule;
@@ -37,6 +39,12 @@ void Game::init() {
 	blueRing.height = GameParams::getCellSizePx() * 24;
 	blueRing.x = screenSize.first / 2 - blueRing.width / 2;
 	blueRing.y = screenSize.second / 2 - blueRing.height / 2;
+
+	Piece* piece = new Piece{"palka"};
+	PieceFactory::buildFigure(piece, 'I');
+	piece->setPosXY({4, 4});
+	addChild(piece);
+
 }
 
 void gameModule::Game::action(float delta) {

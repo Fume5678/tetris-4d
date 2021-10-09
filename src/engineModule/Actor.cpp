@@ -2,12 +2,11 @@
 #include "Root.h"
 
 using namespace engineModule;
-Actor::Actor(std::string name) : name{name}, parent{} {
-
-    if (name != "root") {
-        Root::getRoot()->addChild(this);
-    }
-    isActive = true;
+Actor::Actor(std::string name) : name{ name }, parent{} {
+	if (name != "root") {
+		Root::getRoot()->addChild(this);
+	}
+	isActive = true;
 }
 
 void Actor::render(float delta) {}
@@ -19,96 +18,93 @@ void Actor::onDestroy() {}
 engineModule::Actor::~Actor() {}
 
 void Actor::destroy() {
+	onDestroy();
 
-    onDestroy();
-
-    while (!childs.empty()) {
-        Actor* tmp = childs.back();
-        tmp->destroy();
-        childs.pop_back();
-        delete tmp;
-    }
+	while (!childs.empty()) {
+		Actor* tmp = childs.back();
+		tmp->destroy();
+		childs.pop_back();
+		delete tmp;
+	}
 }
 
 void Actor::addChild(Actor* newChild) {
+	for (auto& child : childs) {
+		if (child == newChild) {
+			std::cerr << "[WARNING]: child(" << newChild->getName() << "{"
+				<< newChild << "}) already added to " << parent;
+			return;
+		}
+	}
 
-    for (auto& child : childs) {
-        if (child == newChild) {
-            std::cerr << "[WARNING]: child(" << newChild->getName() << "{"
-                      << newChild << "}) already added to " << parent;
-            return;
-        }
-    }
-
-    newChild->setParent(this);
-    childs.push_back(newChild);
+	newChild->setParent(this);
+	childs.push_back(newChild);
 }
 
 void Actor::removeChild(Actor* child) {
-
-    for (std::vector<Actor*>::iterator it = childs.begin(); it < childs.end();
-         ++it) {
-        if (*it == child) {
-            (*it)->setParent(nullptr);
-            childs.erase(it);
-            return;
-        }
-        std::cerr << "[WARNING]: child(" << child << "{" << child
-                  << "}) not found for " << parent;
-    }
+	for (std::vector<Actor*>::iterator it = childs.begin(); it < childs.end();
+		 ++it) {
+		if (*it == child) {
+			(*it)->setParent(nullptr);
+			childs.erase(it);
+			return;
+		}
+		std::cerr << "[WARNING]: child(" << child << "{" << child
+			<< "}) not found for " << parent;
+	}
 }
 
 Actor* Actor::find(std::string name) const {
-    for (auto& child : childs) {
-        if (child->getName() == name) {
-            return child;
-        }
-    }
-    return nullptr;
+	for (auto& child : childs) {
+		if (child->getName() == name) {
+			return child;
+		}
+	}
+	return nullptr;
 }
 
 Actor* Actor::find(Actor* actor) const {
-    for (auto& child : childs) {
-        if (child == actor) {
-            return child;
-        }
-    }
-    return nullptr;
+	for (auto& child : childs) {
+		if (child == actor) {
+			return child;
+		}
+	}
+	return nullptr;
 }
 
 void engineModule::Actor::setParent(Actor* newParent) {
-    if (parent == nullptr) {
-        parent = newParent;
-        return;
-    }
+	if (parent == nullptr) {
+		parent = newParent;
+		return;
+	}
 
-    std::vector<Actor*> childs = this->parent->getChilds();
-    for (std::vector<Actor*>::iterator it = childs.begin(); it < childs.end();
-         ++it) {
-        if (*it == this) {
-            childs.erase(it);
-            break;
-        }
-    }
-    parent = newParent;
+	auto childs = this->parent->getChilds();
+	for (std::vector<Actor*>::iterator it = childs.begin(); it < childs.end();
+		 ++it) {
+		if (*it == this) {
+			childs.erase(it);
+			break;
+		}
+	}
+	parent = newParent;
 }
 
 void engineModule::Actor::setActive(bool val) {
-    isActive = val;
+	isActive = val;
 }
 
 bool engineModule::Actor::getActive() const {
-    return isActive;
+	return isActive;
 }
 
 Actor* engineModule::Actor::getParent() const {
-    return parent;
+	return parent;
 }
 
 std::string Actor::getName() const {
-    return name;
+	return name;
 }
 
 std::vector<Actor*>& engineModule::Actor::getChilds() {
-    return childs;
+	return childs;
 }

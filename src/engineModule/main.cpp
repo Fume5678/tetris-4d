@@ -8,68 +8,61 @@
 using namespace engineModule;
 using namespace gameModule;
 
-
 void mainRender(Actor* actor, float delta) {
-    
-    if (!actor->getActive()) {
-        return;
-    }
-    actor->render(delta);
-    for (const auto& child : actor->getChilds()) {
-        mainRender(child, delta);
-    }
+	if (!actor->getActive()) {
+		return;
+	}
+	actor->render(delta);
+	for (const auto& child : actor->getChilds()) {
+		mainRender(child, delta);
+	}
 }
 
 void mainActions(Actor* actor, float delta) {
-
-    if (!actor->getActive()) {
-        return;
-    }
-    actor->action(delta);
-    for (const auto& child : actor->getChilds()) {
-        mainActions(child, delta);
-    }
+	if (!actor->getActive()) {
+		return;
+	}
+	actor->action(delta);
+	for (const auto& child : actor->getChilds()) {
+		mainActions(child, delta);
+	}
 }
 
-
 int main(void) {
-    // Initialization of game
-    //--------------------------------------------------------------------------------------
-    SetConfigFlags(FLAG_MSAA_4X_HINT);
-    InitWindow(EngineParams::getScreenWidth(), EngineParams::getScreenHeight(), "tetris 4D ");
-    SetTargetFPS(EngineParams::getFps());    
-    
-    
-    // Initialization of object tree
-    //--------------------------------------------------------------------------------------
-    Root* root{Root::getRoot()};
-    Game game{"game"};
-    root->addChild(&game);
+	// Initialization of game
+	//--------------------------------------------------------------------------------------
+	SetConfigFlags(FLAG_MSAA_4X_HINT);
+	InitWindow(EngineParams::getScreenWidth(), EngineParams::getScreenHeight(), "tetris 4D ");
+	SetTargetFPS(EngineParams::getFps());
 
+	// Initialization of object tree
+	//--------------------------------------------------------------------------------------
+	Root* root{ Root::getRoot() };
+	Game game{ "game" };
+	root->addChild(&game);
 
-    
-    // Main game loop
-    while (!WindowShouldClose())    // Detect window close button or ESC key
-    {
-        // Actions loop first
-        float delta = GetFrameTime();
-        mainActions(root, delta);
-                
-        // Render loop second
-        BeginDrawing();
-        ClearBackground(WHITE);
+	// Main game loop
+	while (!WindowShouldClose())    // Detect window close button or ESC key
+	{
+		// Actions loop first
+		float delta = GetFrameTime();
+		mainActions(root, delta);
 
-        mainRender(root, delta);
-        if(EngineParams::isShowFps()){
-            DrawFPS(5, 4);
-        }
+		// Render loop second
+		BeginDrawing();
+		ClearBackground(WHITE);
 
-        //----------------------------------------------------------------------------------
-        EndDrawing();
-    }
+		mainRender(root, delta);
+		if (EngineParams::isShowFps()) {
+			DrawFPS(5, 4);
+		}
 
-    CloseWindow();        // Close window and OpenGL context
-    //--------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------
+		EndDrawing();
+	}
 
-    return 0;
+	CloseWindow();        // Close window and OpenGL context
+	//--------------------------------------------------------------------------------------
+
+	return 0;
 }

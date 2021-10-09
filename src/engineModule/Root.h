@@ -3,16 +3,15 @@
 #include "Actor.h"
 
 namespace engineModule {
+	class Root : public Actor {
+		Root(std::string nodeName);
 
-    class Root : public Actor {
-        Root(std::string nodeName);
+	public:
+		~Root();
 
-    public:
-        ~Root();
+		static Root* getRoot();
 
-        static Root* getRoot();
-
-    private:
-        static Root* root;
-    };
+	private:
+		static Root* root;
+	};
 } // namespace engineModule

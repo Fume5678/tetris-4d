@@ -4,39 +4,39 @@
 #include "engineModule/TransformComponent.h"
 
 namespace engineModule {
-    class Actor : public engineModule::TransformComponent {
-    protected:
-        Actor(std::string nodeName);
-        Actor(const Actor&)  = delete;
-        Actor(const Actor&&) = delete;
+	class Actor : public engineModule::TransformComponent {
+	protected:
+		Actor(std::string nodeName);
+		Actor(const Actor&) = delete;
+		Actor(const Actor&&) = delete;
 
-    public:
-        virtual void onDestroy();
-        virtual void render(float delta);
-        virtual void action(float delta);
-        ~Actor();
+	public:
+		virtual void onDestroy();
+		virtual void render(float delta);
+		virtual void action(float delta);
+		~Actor();
 
-        void destroy();
+		void destroy();
 
-        void addChild(Actor* newChild);
-        void removeChild(Actor* child);
+		void addChild(Actor* newChild);
+		void removeChild(Actor* child);
 
-        Actor* find(std::string name) const;
-        Actor* find(Actor* actor) const;
+		Actor* find(std::string name) const;
+		Actor* find(Actor* actor) const;
 
-        void setParent(Actor* newParent);
+		void setParent(Actor* newParent);
 
-        void setActive(bool val);
-        bool getActive() const;
+		void setActive(bool val);
+		bool getActive() const;
 
-        Actor*               getParent() const;
-        std::string          getName() const;
-        std::vector<Actor*>& getChilds();
+		Actor* getParent() const;
+		std::string          getName() const;
+		std::vector<Actor*>& getChilds();
 
-    private:
-        bool                isActive;
-        Actor*              parent;
-        std::string         name;
-        std::vector<Actor*> childs;
-    };
+	private:
+		bool                isActive;
+		Actor* parent;
+		std::string         name;
+		std::vector<Actor*> childs;
+	};
 } // namespace engineModule

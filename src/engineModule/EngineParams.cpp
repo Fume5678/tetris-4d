@@ -6,26 +6,26 @@ bool EngineParams::bShowFps{};
 int EngineParams::fps{ 30 };
 std::pair<int, int> EngineParams::screenResolution{ 1280, 720 };
 
- void EngineParams::setShowFps(bool val) {
+void EngineParams::setShowFps(bool val) {
 	bShowFps = val;
 }
 
- bool EngineParams::isShowFps() {
+bool EngineParams::isShowFps() {
 	return bShowFps;
 }
 
- int EngineParams::getScreenWidth() {
+int EngineParams::getScreenWidth() {
 	return screenResolution.first;
 }
 
- int EngineParams::getScreenHeight() {
+int EngineParams::getScreenHeight() {
 	return screenResolution.second;
 }
 
- std::pair<int, int> EngineParams::getScreenResolution() {
+std::pair<int, int> EngineParams::getScreenResolution() {
 	return screenResolution;
 }
 
- int EngineParams::getFps() {
+int EngineParams::getFps() {
 	return fps;
 }

@@ -9,6 +9,7 @@ namespace engineModule {
     public:
         void setX(float val);
         void setY(float val);
+        void setXY(float val1, float val2);
         void setScaleX(float val);
         void setScaleY(float val);
         void setSizeX(float val);
@@ -29,8 +30,8 @@ namespace engineModule {
 
     private:
         std::pair<float, float> pos;
-        std::pair<float, float> scale{ 1.0f, 1.0f };
+        std::pair<float, float> scale{1.0f, 1.0f};
         std::pair<float, float> size;
     };
 
-} // namespace EngineModuleespace EngineMod
+} // namespace engineModule
