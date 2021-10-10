@@ -59,7 +59,6 @@ void Game::init() {
 
 void gameModule::Game::action(float delta) {
 	currentTick++;
-
 	movePiece();
 
 	// RedRing
@@ -92,13 +91,15 @@ void gameModule::Game::render(float delta) {
 				DrawRectangleLinesEx(gridRect, 0.5, LIGHTGRAY);
 			}
 			else {
-				if (10 < i && i < 19 && 10 <= j && j < 19) {
+				if (11 <= i && i < 19 && 11 <= j && j < 19) {
 					DrawRectangle(gridRect.x, gridRect.y, gridRect.width, gridRect.height, BLACK);
 				}
 				else {
 					DrawRectangle(gridRect.x, gridRect.y, gridRect.width, gridRect.height, GRAY);
+
 				}
 			}
+
 		}
 	}
 
@@ -107,52 +108,74 @@ void gameModule::Game::render(float delta) {
 	DrawRectangleLinesEx(redRing, 3, RED);
 }
 
-void gameModule::Game::movePiece()
+
+void Game::destroyPiece(){
+	if (!activePiece) {
+		return;
+	}
+
+	auto coords = activePiece->getGlobalBlocksCoords();
+	for (const auto& crd : coords) {
+		gridTable[crd.x][crd.y] = true;
+	}
+
+	removeChild(activePiece);
+	delete activePiece;
+	activePiece = nullptr;
+}
+
+void Game::movePiece()
 {
 	if (!activePiece) {
 		return;
 	}
 
 	// Move piece
-
+	
 		// Left
 	if (IsKeyPressed(KEY_D)) {
+		TraceLog(LOG_INFO, "Right");
 		if (isCollide(1, 0)) {
-			std::cout << "Collided\n";
+			destroyPiece();
+			return;
 		}
-		else {
-			activePiece->moveOnGrid(1, 0);
-		}
+		activePiece->moveOnGrid(1, 0);
 	}
 
 	// Right
 	if (IsKeyPressed(KEY_A)) {
+		TraceLog(LOG_INFO, "Left");
 		if (isCollide(-1, 0)) {
-			std::cout << "Collided\n";
+			destroyPiece();
 		}
-		else {
-			activePiece->moveOnGrid(-1, 0);
-		}
+		activePiece->moveOnGrid(-1, 0);
 	}
 	// Up
 	if (IsKeyPressed(KEY_W)) {
+		TraceLog(LOG_INFO, "Up");
 		if (isCollide(0, -1)) {
-			std::cout << "Collided\n";
+			destroyPiece();
+			return;
 		}
-		else {
-			activePiece->moveOnGrid(0, -1);
-		}
+		activePiece->moveOnGrid(0, -1);
 	}
-
 	// Down
 	if (IsKeyPressed(KEY_S)) {
+		TraceLog(LOG_INFO, "Down");
 		if (isCollide(0, 1)) {
-			std::cout << "Collided\n";
+			destroyPiece();
+			return;
 		}
-		else {
-			activePiece->moveOnGrid(0, 1);
-		}
+		activePiece->moveOnGrid(0, 1);
 	}
+
+	/*if (
+		isCollide(1, 0) ||
+		isCollide(-1, 0) ||
+		isCollide(0, 1) ||
+		isCollide(0, -1)) {
+		destroyPiece()
+	}*/
 
 	if (IsKeyPressed(KEY_Q)) {
 		activePiece->rotateLeft();
@@ -170,7 +193,7 @@ bool gameModule::Game::isCollide(int directX, int directY)
 	}
 
 	std::vector<Vector2i> pieceBlocksCoord = activePiece->getGlobalBlocksCoords();
-	for (auto coord : pieceBlocksCoord) {
+	for (const auto& coord : pieceBlocksCoord) {
 		if (gridTable[coord.x + directX][coord.y + directY]) {
 			return true;
 		}

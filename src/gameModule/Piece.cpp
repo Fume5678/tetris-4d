@@ -44,7 +44,6 @@ void gameModule::Piece::render(float delta)
 	auto currentBlocks = (*p_currentBlocks);
 	for (size_t i = 0; i < currentBlocks.size(); ++i)
 	{
-		std::cout << posOnGrid.x << " " << posOnGrid.y << std::endl;
 		DrawRectangle((currentBlocks[i].x + posOnGrid.x) * GameParams::getCellSizePx() + getX(),
 			(currentBlocks[i].y  + posOnGrid.y) * GameParams::getCellSizePx() + getY(),
 			GameParams::getCellSizePx(),

@@ -19,6 +19,7 @@ namespace gameModule {
 
         void action(float delta) override;
         void render(float delta) override;
+        void destroyPiece();
 
         void movePiece();
         bool isCollide(int directX, int directY);

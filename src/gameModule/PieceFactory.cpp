@@ -31,30 +31,30 @@ void gameModule::PieceFactory::buildFigure(Piece* piece, char shape) {
     // Hand work's for lohs
     switch (shape) {
         case ('I'): {
+            upBlocks.push_back({-1, 0});
             upBlocks.push_back({0, 0});
             upBlocks.push_back({1, 0});
             upBlocks.push_back({2, 0});
-            upBlocks.push_back({3, 0});
 
+            leftBlocks.push_back({0, -1});
             leftBlocks.push_back({0, 0});
             leftBlocks.push_back({0, 1});
             leftBlocks.push_back({0, 2});
-            leftBlocks.push_back({0, 3});
 
             downBlocks = upBlocks;
             rightBlocks = leftBlocks;
             break;
         }
         case ('S'): {
+            upBlocks.push_back({-1, 1});
             upBlocks.push_back({0, 1});
-            upBlocks.push_back({1, 1});
+            upBlocks.push_back({0, 0});
             upBlocks.push_back({1, 0});
-            upBlocks.push_back({2, 0});
 
+            leftBlocks.push_back({0, -1});
             leftBlocks.push_back({0, 0});
-            leftBlocks.push_back({0, 1});
+            leftBlocks.push_back({1, 0});
             leftBlocks.push_back({1, 1});
-            leftBlocks.push_back({1, 2});
 
             downBlocks = upBlocks;
             rightBlocks = leftBlocks;

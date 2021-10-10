@@ -3,9 +3,6 @@
 
 using namespace engineModule;
 Actor::Actor(std::string name) : name{ name }, parent{} {
-	if (name != "root") {
-		Root::getRoot()->addChild(this);
-	}
 	isActive = true;
 }
 
