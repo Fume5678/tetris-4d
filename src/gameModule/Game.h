@@ -20,12 +20,15 @@ namespace gameModule {
         void action(float delta) override;
         void render(float delta) override;
 
+        void movePiece();
+        bool isCollide(int directX, int directY);
+
 
     private:
         GridTable gridTable;
         std::pair<float, float> screenSize;
         Texture2D bg;
-        int stepTimer;
+        long currentTick;
         int deleyRedRing;
         Rectangle redRing;
         Rectangle blueRing;

@@ -32,7 +32,6 @@ namespace gameModule {
         std::vector<Vector2i>& getRefRightBlocks();
         std::vector<Vector2i>& getRefDownBlocks();
         std::vector<Vector2i>& getRefLeftBlocks();
-
     public:
         Piece(std::string name);
         ~Piece();
@@ -43,8 +42,13 @@ namespace gameModule {
         void rotateLeft();
         void rotateRight();
 
+        void moveOnGrid(int x, int y);
+
+        void setPosOnGrid(int x, int y);
+
         Vector2i getPosOnGrid();
-        std::vector<Vector2i>* getCurrentBlocks();
+        std::vector<Vector2i>* getBlocks();
+        std::vector<Vector2i> getGlobalBlocksCoords();
 
     private:
         Color                 blocsColor;
