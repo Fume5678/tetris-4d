@@ -3,8 +3,8 @@
 
 using namespace gameModule;
 
-gameModule::Piece::Piece(std::string name)
-	: Actor{ name }, posOnGrid{}, p_currentBlocks{ &upBlocks }
+gameModule::Piece::Piece()
+	: posOnGrid{}, p_currentBlocks{ &upBlocks }
 {
 	init();
 }

@@ -1,4 +1,5 @@
-#include <thread>
+#include <sstream>
+#include <array>
 
 #include "gameModule/GameParams.h"
 #include "Game.h"
@@ -49,8 +50,9 @@ void Game::init() {
 	setX(redRing.x);
 	setY(redRing.y);
 
-	activePiece = new Piece{ "palka" };
+	activePiece = new Piece;
 	PieceFactory::buildFigure(activePiece, 'S');
+	activePiece->setName("Piece");
 	activePiece->setXY(redRing.x, redRing.y);
 	activePiece->setPosOnGrid(3, 3);
 	addChild(activePiece);
@@ -122,6 +124,28 @@ void Game::destroyPiece(){
 	removeChild(activePiece);
 	delete activePiece;
 	activePiece = nullptr;
+
+	// Reset red ring
+	redRing.width = GameParams::getCellSizePx() * 30; // 30 - red ring size
+	redRing.height = GameParams::getCellSizePx() * 30;
+	redRing.x = screenSize.first / 2 - redRing.width / 2;
+	redRing.y = screenSize.second / 2 - redRing.height / 2;
+}
+
+void gameModule::Game::spawnPiece()
+{
+	if (activePiece) {
+		TraceLog(LOG_ERROR, "Piece already create");
+	}
+
+	char shape = std::array<char, 2>{
+		'I', 'S'} [rand() % 2] ;
+
+	activePiece = new Piece;
+	std::stringstream sstr;
+	sstr << "Piece_" << activePiece;
+	activePiece->setName(sstr.str());
+	addChild(activePiece);
 }
 
 void Game::movePiece()
@@ -168,14 +192,6 @@ void Game::movePiece()
 		}
 		activePiece->moveOnGrid(0, 1);
 	}
-
-	/*if (
-		isCollide(1, 0) ||
-		isCollide(-1, 0) ||
-		isCollide(0, 1) ||
-		isCollide(0, -1)) {
-		destroyPiece()
-	}*/
 
 	if (IsKeyPressed(KEY_Q)) {
 		activePiece->rotateLeft();

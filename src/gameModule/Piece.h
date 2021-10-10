@@ -33,7 +33,7 @@ namespace gameModule {
         std::vector<Vector2i>& getRefDownBlocks();
         std::vector<Vector2i>& getRefLeftBlocks();
     public:
-        Piece(std::string name);
+        Piece();
         ~Piece();
 
         void init();

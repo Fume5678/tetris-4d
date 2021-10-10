@@ -2,6 +2,11 @@
 #include "Root.h"
 
 using namespace engineModule;
+engineModule::Actor::Actor() : name{}, parent{}
+{
+	isActive = true;
+}
+
 Actor::Actor(std::string name) : name{ name }, parent{} {
 	isActive = true;
 }
@@ -26,6 +31,11 @@ void Actor::destroy() {
 }
 
 void Actor::addChild(Actor* newChild) {
+	if (newChild->name.empty()) {
+		throw std::runtime_error{"Not set the name"};
+	}
+
+
 	for (auto& child : childs) {
 		if (child == newChild) {
 			std::cerr << "[WARNING]: child(" << newChild->getName() << "{"
@@ -88,6 +98,16 @@ void engineModule::Actor::setParent(Actor* newParent) {
 
 void engineModule::Actor::setActive(bool val) {
 	isActive = val;
+}
+
+void engineModule::Actor::setName(std::string val)
+{
+	name = val;
+}
+
+std::string engineModule::Actor::getName()
+{
+	return name;
 }
 
 bool engineModule::Actor::getActive() const {
