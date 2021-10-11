@@ -47,7 +47,7 @@ int main(void) {
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key
 	{
-		std::chrono::steady_clock::time_point pr_StartTime = std::chrono::steady_clock::now();
+		//std::chrono::steady_clock::time_point pr_StartTime = std::chrono::steady_clock::now();
 		
 		float delta = GetFrameTime();
 
@@ -66,9 +66,9 @@ int main(void) {
 
 		//tha.join();
 		//thr.join();
-		std::chrono::steady_clock::time_point pr_EndTime = std::chrono::steady_clock::now();
-		auto Duration = std::chrono::duration_cast<std::chrono::microseconds>(pr_EndTime - pr_StartTime);
-		std::cout << "Duration " << Duration.count() << " ms" << std::endl;
+		//std::chrono::steady_clock::time_point pr_EndTime = std::chrono::steady_clock::now();
+		//auto Duration = std::chrono::duration_cast<std::chrono::microseconds>(pr_EndTime - pr_StartTime);
+		//std::cout << "Duration " << Duration.count() << " ms" << std::endl;
 		
 		EndDrawing();
 	}
