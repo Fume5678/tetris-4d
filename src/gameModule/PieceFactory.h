@@ -9,7 +9,7 @@ namespace gameModule {
         ~PieceFactory();
 
         static PieceFactory* getInstance();
-        static void buildFigure(Piece* piece, char c);
+        Piece* buildFigure( char c);
     private:
         static PieceFactory* instance;
     };

@@ -21,21 +21,25 @@ namespace gameModule {
         void render(float delta) override;
         void destroyPiece();
         void spawnPiece();
-
+        void resetGame();
+        void resetGrid();
+        void endGame();
         void movePiece();
+
         bool isCollide(int directX, int directY);
+        bool isLose();
 
 
     private:
+        bool gameRun;
         GridTable gridTable;
         std::pair<float, float> screenSize;
         Texture2D bg;
         long currentTick;
-        int deleyRedRing;
+        uint32_t delayStartRedRing;
         Rectangle redRing;
         Rectangle blueRing;
         Rectangle gridRect;
-        Rectangle blackSquare;
         Piece* activePiece;
     };
 } // namespace gameModule
