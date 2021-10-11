@@ -4,6 +4,8 @@
 #include "gameModule/Game.h"
 #include "engineModule/EngineParams.h"
 #include "engineModule/Root.h"
+#include <thread>
+#include <chrono>
 
 using namespace engineModule;
 using namespace gameModule;
@@ -45,20 +47,29 @@ int main(void) {
 	// Main game loop
 	while (!WindowShouldClose())    // Detect window close button or ESC key
 	{
-		// Actions loop first
+		std::chrono::steady_clock::time_point pr_StartTime = std::chrono::steady_clock::now();
+		
 		float delta = GetFrameTime();
+
+		//std::thread tha{ mainActions, root, delta };
 		mainActions(root, delta);
 
-		// Render loop second
 		BeginDrawing();
 		ClearBackground(WHITE);
-
+		
+		//std::thread thr{ mainRender, root, delta };
 		mainRender(root, delta);
+
 		if (EngineParams::isShowFps()) {
 			DrawFPS(5, 4);
 		}
 
-		//----------------------------------------------------------------------------------
+		//tha.join();
+		//thr.join();
+		std::chrono::steady_clock::time_point pr_EndTime = std::chrono::steady_clock::now();
+		auto Duration = std::chrono::duration_cast<std::chrono::microseconds>(pr_EndTime - pr_StartTime);
+		std::cout << "Duration " << Duration.count() << " ms" << std::endl;
+		
 		EndDrawing();
 	}
 

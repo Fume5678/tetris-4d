@@ -3,7 +3,7 @@
 using namespace engineModule;
 
 bool EngineParams::bShowFps{};
-int EngineParams::fps{ 30 };
+int EngineParams::fps{ 60 };
 std::pair<int, int> EngineParams::screenResolution{ 1280, 720 };
 
 void EngineParams::setShowFps(bool val) {

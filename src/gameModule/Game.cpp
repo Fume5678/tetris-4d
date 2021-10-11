@@ -234,7 +234,6 @@ void Game::movePiece() {
 
     // Left
     if (IsKeyPressed(KEY_D)) {
-        TraceLog(LOG_INFO, "Right");
         if (isCollide(1, 0)) {
             destroyPiece();
             return;
@@ -244,7 +243,6 @@ void Game::movePiece() {
 
     // Right
     if (IsKeyPressed(KEY_A)) {
-        TraceLog(LOG_INFO, "Left");
         if (isCollide(-1, 0)) {
             destroyPiece();
         }
@@ -252,7 +250,6 @@ void Game::movePiece() {
     }
     // Up
     if (IsKeyPressed(KEY_W)) {
-        TraceLog(LOG_INFO, "Up");
         if (isCollide(0, -1)) {
             destroyPiece();
             return;
@@ -261,7 +258,6 @@ void Game::movePiece() {
     }
     // Down
     if (IsKeyPressed(KEY_S)) {
-        TraceLog(LOG_INFO, "Down");
         if (isCollide(0, 1)) {
             destroyPiece();
             return;
