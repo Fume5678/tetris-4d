@@ -21,7 +21,7 @@ namespace gameModule {
         void onDestroy() override;
         void destroyPiece();
         void spawnPiece();
-        void resetGame();
+        void respawn();
         void resetGrid();
         void endGame();
         void movePiece();
@@ -42,5 +42,6 @@ namespace gameModule {
         Rectangle               blueRing;
         Rectangle               gridRect;
         Piece*                  activePiece;
+        int                     score;
     };
 } // namespace gameModule

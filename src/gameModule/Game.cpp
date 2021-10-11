@@ -1,4 +1,4 @@
-
+#include <string>
 #include <array>
 
 #include "gameModule/GameParams.h"
@@ -13,22 +13,26 @@
 using namespace gameModule;
 using namespace engineModule;
 
-Game::Game(std::string name)
-    : Actor{name}, gridTable{}, currentTick{}, delayStartRedRing{
-                                                   REDRING_START_DELAY} {
-    screenSize = ::EngineParams::getScreenResolution();
-    EngineParams::setShowFps(true);
+Game::Game(std::string name) : Actor{name}, gridTable{} {
 
     resetGrid();
-
     init();
 }
 
 gameModule::Game::~Game() {}
 
 void Game::init() {
+    currentTick = 0;
+    score       = 0;
+
+    delayStartRedRing = REDRING_START_DELAY;
+
+    EngineParams::setShowFps(true);
+    screenSize = ::EngineParams::getScreenResolution();
+
     music = LoadMusicStream(ASSETS_PATH "music.mp3");
     PlayMusicStream(music);
+
     bg        = LoadTexture(ASSETS_PATH "background.png");
     bg.width  = ::EngineParams::getScreenWidth();
     bg.height = ::EngineParams::getScreenHeight();
@@ -42,7 +46,7 @@ void Game::init() {
     blueRing.x      = screenSize.first / 2 - blueRing.width / 2;
     blueRing.y      = screenSize.second / 2 - blueRing.height / 2;
 
-    resetGame();
+    respawn();
 }
 
 void gameModule::Game::action(float delta) {
@@ -116,6 +120,9 @@ void gameModule::Game::render(float delta) {
     DrawRectangleLinesEx(redRing, 3, RED);
     DrawRectangleLinesEx(redRing, 3, RED);
 
+    std::string sscore = "Score: " + std::to_string(score);
+    DrawText(sscore.c_str(), 10, 45, 34, BLACK);
+
     if (!gameRun) {
         DrawText("Game over\npress R to restart",
                  EngineParams::getScreenWidth() / 2,
@@ -125,8 +132,7 @@ void gameModule::Game::render(float delta) {
     }
 }
 
-void gameModule::Game::onDestroy()
-{
+void gameModule::Game::onDestroy() {
     UnloadMusicStream(music);
 }
 
@@ -154,7 +160,9 @@ void Game::destroyPiece() {
     redRing.y      = screenSize.second / 2 - redRing.height / 2;
 
     delayStartRedRing = REDRING_START_DELAY;
-    resetGame();
+
+    score++;
+    respawn();
 }
 
 void gameModule::Game::spawnPiece() {
@@ -162,11 +170,12 @@ void gameModule::Game::spawnPiece() {
         TraceLog(LOG_ERROR, "Piece already create");
     }
 
-    char shape = std::array<char, 7>{'T', 'S', 'Z', 'I', 'O', 'L', 'J'} [rand() % 7] ;
+    char shape =
+        std::array<char, 7>{'T', 'S', 'Z', 'I', 'O', 'L', 'J'}[rand() % 7];
 
     int      randInd    = rand() % 4;
     Vector2i startPoint = std::array<Vector2i, 4>{Vector2i{14, 2},
-                                                  Vector2i{1, 14},
+                                                  Vector2i{2, 14},
                                                   Vector2i{14, 28},
                                                   Vector2i{28, 14}}[randInd];
 
@@ -179,8 +188,8 @@ void gameModule::Game::spawnPiece() {
     addChild(activePiece);
 }
 
-void gameModule::Game::resetGame() {
-    gameRun     = true;
+void gameModule::Game::respawn() {
+
     redRingSize = GameParams::getGridSize().first;
     redRing.width =
         GameParams::getCellSizePx() * redRingSize; // 30 - red ring size
@@ -211,6 +220,8 @@ void gameModule::Game::endGame() {
     if (IsKeyPressed(KEY_R)) {
         destroyPiece();
         resetGrid();
+        score   = 0;
+        gameRun = true;
     }
 }
 
