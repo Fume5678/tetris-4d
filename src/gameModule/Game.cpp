@@ -27,6 +27,8 @@ Game::Game(std::string name)
 gameModule::Game::~Game() {}
 
 void Game::init() {
+    music = LoadMusicStream(ASSETS_PATH "music.mp3");
+    PlayMusicStream(music);
     bg        = LoadTexture(ASSETS_PATH "background.png");
     bg.width  = ::EngineParams::getScreenWidth();
     bg.height = ::EngineParams::getScreenHeight();
@@ -50,6 +52,10 @@ void gameModule::Game::action(float delta) {
         return;
     }
 
+    if (!activePiece) {
+        return;
+    }
+
     gameRun = !isLose();
 
     currentTick++;
@@ -62,6 +68,7 @@ void gameModule::Game::action(float delta) {
             redRing.y += GameParams::getCellSizePx();
             redRing.width -= GameParams::getCellSizePx() * 2;
             redRing.height -= GameParams::getCellSizePx() * 2;
+            redRingSize -= 2;
         }
     } else {
         delayStartRedRing--;
@@ -77,6 +84,8 @@ void gameModule::Game::action(float delta) {
 
 void gameModule::Game::render(float delta) {
     DrawTexture(bg, 0, 0, WHITE);
+
+    UpdateMusicStream(music);
 
     // TODO: optimize grid drawing
     for (int i = 0; i < 30; ++i) {
@@ -100,8 +109,6 @@ void gameModule::Game::render(float delta) {
                                   GRAY);
                 }
             }
-            DrawText(
-                std::to_string(i).c_str(), gridRect.x, gridRect.y, 9, WHITE);
         }
     }
 
@@ -112,11 +119,15 @@ void gameModule::Game::render(float delta) {
     if (!gameRun) {
         DrawText("Game over\npress R to restart",
                  EngineParams::getScreenWidth() / 2,
-                 EngineParams::getScreenHeight()/2,
+                 EngineParams::getScreenHeight() / 2,
                  42,
                  RED);
-
     }
+}
+
+void gameModule::Game::onDestroy()
+{
+    UnloadMusicStream(music);
 }
 
 void Game::destroyPiece() {
@@ -151,7 +162,7 @@ void gameModule::Game::spawnPiece() {
         TraceLog(LOG_ERROR, "Piece already create");
     }
 
-    char shape = std::array<char, 3>{'T'}[rand() % 1];
+    char shape = std::array<char, 7>{'T', 'S', 'Z', 'I', 'O', 'L', 'J'} [rand() % 7] ;
 
     int      randInd    = rand() % 4;
     Vector2i startPoint = std::array<Vector2i, 4>{Vector2i{14, 2},
@@ -169,9 +180,11 @@ void gameModule::Game::spawnPiece() {
 }
 
 void gameModule::Game::resetGame() {
-    gameRun        = true;
-    redRing.width  = GameParams::getCellSizePx() * 30; // 30 - red ring size
-    redRing.height = GameParams::getCellSizePx() * 30;
+    gameRun     = true;
+    redRingSize = GameParams::getGridSize().first;
+    redRing.width =
+        GameParams::getCellSizePx() * redRingSize; // 30 - red ring size
+    redRing.height = GameParams::getCellSizePx() * redRingSize;
     redRing.x      = screenSize.first / 2 - redRing.width / 2;
     redRing.y      = screenSize.second / 2 - redRing.height / 2;
 
@@ -199,7 +212,6 @@ void gameModule::Game::endGame() {
         destroyPiece();
         resetGrid();
     }
-    std::cout << "GameLose\n";
 }
 
 void Game::movePiece() {
@@ -278,13 +290,14 @@ bool gameModule::Game::isCollide(int directX, int directY) {
 }
 
 bool gameModule::Game::isLose() {
+    // Check for blue outside
     for (int i = 0; i < 30; ++i) {
-        for (int j = 0; j < 4; ++j) {
+        for (int j = 0; j < 3; ++j) {
             if (gridTable[i][j]) {
                 return true;
             }
         }
-        for (int j = 26; j < 30; ++j) {
+        for (int j = 27; j < 30; ++j) {
             if (gridTable[i][j]) {
                 return true;
             }
@@ -292,15 +305,26 @@ bool gameModule::Game::isLose() {
     }
 
     for (int j = 0; j < 30; ++j) {
-        for (int i = 0; i < 4; ++i) {
+        for (int i = 0; i < 3; ++i) {
             if (gridTable[i][j]) {
                 return true;
             }
         }
-        for (int i = 26; i < 30; ++i) {
+        for (int i = 27; i < 30; ++i) {
             if (gridTable[i][j]) {
                 return true;
             }
+        }
+    }
+
+    int border = (GameParams::getGridSize().first - redRingSize) / 2;
+    // Check for red
+    for (const auto& crd : activePiece->getGlobalBlocksCoords()) {
+        if (crd.x < border ||
+            crd.x > GameParams::getGridSize().first - border - 1 ||
+            crd.y < border ||
+            crd.y > GameParams::getGridSize().first - border - 1) {
+            return true;
         }
     }
 

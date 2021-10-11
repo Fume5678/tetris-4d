@@ -33,6 +33,7 @@ int main(void) {
 	//--------------------------------------------------------------------------------------
 	SetConfigFlags(FLAG_MSAA_4X_HINT);
 	InitWindow(EngineParams::getScreenWidth(), EngineParams::getScreenHeight(), "tetris 4D ");
+	InitAudioDevice();
 	SetTargetFPS(EngineParams::getFps());
 
 	// Initialization of object tree
@@ -60,6 +61,8 @@ int main(void) {
 		//----------------------------------------------------------------------------------
 		EndDrawing();
 	}
+
+	CloseAudioDevice();
 
 	CloseWindow();        // Close window and OpenGL context
 	//--------------------------------------------------------------------------------------
